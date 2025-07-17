@@ -1,5 +1,6 @@
 "use client";
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { useTimer } from '@/components/TimerProvider';
 
 function formatTime(seconds: number) {
@@ -9,19 +10,49 @@ function formatTime(seconds: number) {
 }
 
 export default function SummaryPage() {
-  const { seconds } = useTimer();
+  const { seconds, stopTimer } = useTimer();
+  
+  useEffect(() => {
+    // Stop the timer when the summary page loads
+    stopTimer();
+  }, [stopTimer]);
+  
   return (
-    <main>
-      <h1 style={{ fontSize: '2.2rem', marginBottom: '1.5rem' }}>🎉 Course Complete!</h1>
-      <p style={{ fontSize: '1.2rem', marginBottom: '2.5rem', color: '#444' }}>
-        You finished the interactive prompt engineering course.<br />
-        <span style={{ fontWeight: 600, color: '#a05a2c' }}>
-          Total time: {formatTime(seconds)}
-        </span>
-      </p>
-      <Link href="/" style={{ color: '#a05a2c', textDecoration: 'underline', fontWeight: 600, fontSize: '1.1rem' }}>
-        ← Back to Home
-      </Link>
+    <main className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="w-full max-w-md mx-auto">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 space-y-6 text-center">
+          <div className="space-y-4">
+            <div className="text-4xl">🎉</div>
+            <h1 className="text-3xl font-semibold text-gray-900">
+              Course Complete!
+            </h1>
+            <p className="text-gray-600 text-base">
+              Congratulations! You&apos;ve finished the interactive prompt engineering course and learned the fundamentals of working with AI language models.
+            </p>
+          </div>
+          
+          <div className="bg-gray-50 rounded-md p-4 space-y-2">
+            <div className="text-gray-900 text-sm font-medium">Total Time Spent</div>
+            <div className="text-2xl font-semibold text-gray-900">{formatTime(seconds)}</div>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="text-center space-y-2">
+              <h2 className="text-gray-900 text-base font-medium">What&apos;s Next?</h2>
+              <p className="text-gray-600 text-sm">
+                Practice what you&apos;ve learned by experimenting with different prompts in your favorite AI tools. The more you practice, the better you&apos;ll become at prompt engineering.
+              </p>
+            </div>
+            
+            <Link 
+              href="/start" 
+              className="block w-full bg-gray-900 text-white rounded-md px-4 py-3 font-medium text-center hover:bg-gray-800 transition-colors"
+            >
+              Take the Course Again
+            </Link>
+          </div>
+        </div>
+      </div>
     </main>
   );
-} 
+}

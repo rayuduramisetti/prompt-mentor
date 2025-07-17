@@ -1,33 +1,31 @@
 "use client";
-
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { promptTypes } from '@/config/promptTypes';
-import Link from 'next/link';
-import { useState } from 'react';
-import { useTimer } from '@/components/TimerProvider';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 
-function formatMinutes(seconds: number) {
-  const m = Math.floor(seconds / 60);
-  return `${m} min`;
-}
-
-export default function PromptTypePage({ params }: { params: { type: string } }) {
-  const promptType = promptTypes.find((pt) => pt.key === params.type);
-  if (!promptType) return notFound();
-
-  const { seconds, showTimer, setShowTimer, stopTimer } = useTimer();
-  const router = useRouter();
-
-  const [showAnalogies, setShowAnalogies] = useState(true);
-  const idx = promptTypes.findIndex((pt) => pt.key === params.type);
-  const prev = idx > 0 ? promptTypes[idx - 1] : null;
-  const next = idx < promptTypes.length - 1 ? promptTypes[idx + 1] : null;
-
-  const [prompt, setPrompt] = useState(promptType.example);
+export default function PromptTypePage() {
+  const params = useParams();
+  const type = params.type as string;
+  
+  const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  const promptType = promptTypes.find((pt) => pt.key === type);
+  const idx = promptTypes.findIndex((pt) => pt.key === type);
+  const prev = idx > 0 ? promptTypes[idx - 1] : null;
+  const next = idx < promptTypes.length - 1 ? promptTypes[idx + 1] : null;
+
+  useEffect(() => {
+    if (promptType && prompt === '') {
+      setPrompt(promptType.example);
+    }
+  }, [promptType, prompt]);
+
+  if (!promptType) return notFound();
 
   async function handleRunPrompt() {
     setLoading(true);
@@ -42,97 +40,128 @@ export default function PromptTypePage({ params }: { params: { type: string } })
       if (!res.ok) throw new Error('API error');
       const data = await res.json();
       setResponse(data.result || '');
-    } catch (e: any) {
-      setError(e.message || 'Something went wrong');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Something went wrong');
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main>
-      <div style={{ marginBottom: '0.5rem' }}>
-        <Link href="/" style={{ color: '#a05a2c', textDecoration: 'underline', fontWeight: 600, fontSize: '1rem' }}>
-          ← Home
-        </Link>
-      </div>
-      <h1 style={{ fontSize: '1.15rem', marginBottom: '0.3rem', marginTop: 0, fontWeight: 700 }}>{promptType.name}</h1>
-      <p style={{ color: '#444', fontSize: '1.05rem', marginBottom: '0.8rem', marginTop: 0 }}>{promptType.description}</p>
-
-      <div style={{ marginBottom: '0.8rem', marginTop: '0.4rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.3rem', marginTop: 0 }}>Example Prompt</h2>
-        <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '1.05rem', padding: '0.5rem 0.8rem', background: 'none' }}>{promptType.example}</pre>
-      </div>
-
-      <div style={{ marginBottom: '0.8rem', marginTop: '0.4rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.3rem', marginTop: 0 }}>Analogies</h2>
-        <ul style={{ color: '#444', marginTop: 0, fontSize: '1.05rem', paddingLeft: 16 }}>
-          {promptType.analogies.map((a, i) => (
-            <li key={i} style={{ marginBottom: '0.2rem' }}>{a}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div style={{ marginBottom: '0.8rem', marginTop: '0.4rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.3rem', marginTop: 0 }}>Try it Yourself</h2>
-        <textarea
-          rows={2}
-          value={prompt}
-          onChange={e => setPrompt(e.target.value)}
-          style={{ fontSize: '1.05rem', padding: '0.5rem 0.8rem', marginBottom: '0.3rem', minHeight: 32, maxHeight: 70, resize: 'vertical' }}
-        />
-        <button
-          onClick={handleRunPrompt}
-          disabled={loading || !prompt.trim()}
-          style={{ background: '#a05a2c', color: '#fff', borderRadius: 4, padding: '0.4rem 1rem', fontWeight: 600, fontSize: '1.05rem', textDecoration: 'none', border: 'none', marginTop: 0, marginBottom: 0, display: 'inline-block', cursor: loading || !prompt.trim() ? 'not-allowed' : 'pointer', opacity: loading || !prompt.trim() ? 0.6 : 1 }}
-        >
-          {loading ? 'Running...' : 'Run Prompt'}
-        </button>
-        {error && <div style={{ color: '#b91c1c', marginTop: '0.3rem', fontSize: '1.05rem' }}>{error}</div>}
-        {response && (
-          <div style={{ marginTop: '0.3rem' }}>
-            <span style={{ color: '#a05a2c', fontWeight: 700, marginBottom: '0.1rem', display: 'block', fontSize: '1.05rem' }}>Response:</span>
-            <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontSize: '1.05rem', padding: '0.5rem 0.8rem', background: 'none' }}>{response}</pre>
+    <main className="min-h-screen bg-white p-4">
+      <div className="w-full max-w-md mx-auto">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 space-y-6">
+          <div className="text-center space-y-3">
+            <h1 className="text-2xl font-semibold text-gray-900">{promptType.name}</h1>
+            <p className="text-gray-600 text-sm">{promptType.description}</p>
           </div>
-        )}
-      </div>
-
-      <div style={{ marginBottom: '0.8rem', marginTop: '0.4rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.3rem', marginTop: 0 }}>Additional Resources</h2>
-        <ul style={{ color: '#444', marginTop: 0, fontSize: '1.05rem', paddingLeft: 16 }}>
-          {promptType.resources.map((r, i) => (
-            <li key={i} style={{ marginBottom: '0.2rem' }}>
-              <a href={r.url} target="_blank" rel="noopener noreferrer">{r.label}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.3rem', alignItems: 'center' }}>
-        {prev ? (
-          <Link href={`/prompt/${prev.key}`} style={{ color: '#a05a2c', textDecoration: 'underline', fontWeight: 600, fontSize: '0.92rem' }}>
-            ← {prev.name}
-          </Link>
-        ) : <span />}
-        {next ? (
-          <Link href={`/prompt/${next.key}`} style={{ color: '#a05a2c', textDecoration: 'underline', fontWeight: 600, fontSize: '0.92rem' }}>
-            {next.name} →
-          </Link>
-        ) : <span />}
-      </div>
-      {next === null && (
-        <div style={{ marginTop: '0.3rem', textAlign: 'center' }}>
-          <button
-            onClick={() => {
-              stopTimer();
-              router.push('/summary');
-            }}
-            style={{ background: '#a05a2c', color: '#fff', borderRadius: 4, padding: '0.4rem 1.1rem', fontWeight: 600, fontSize: '0.98rem', textDecoration: 'none', border: 'none', display: 'inline-block', cursor: 'pointer' }}
-          >
-            Finish
-          </button>
+          
+          <section className="space-y-3">
+            <h2 className="text-gray-900 text-base font-medium">Example Prompt</h2>
+            <div className="bg-gray-50 border border-gray-200 rounded-md p-3 text-sm font-mono whitespace-pre-wrap">
+              {promptType.example}
+            </div>
+          </section>
+          
+          <section className="space-y-3">
+            <h2 className="text-gray-900 text-base font-medium">Analogies</h2>
+            <div className="bg-gray-50 rounded-md p-4">
+              <ul className="space-y-2 text-gray-600 text-sm">
+                {promptType.analogies.map((a, i) => (
+                  <li key={i} className="flex items-start">
+                    <span className="inline-block w-1.5 h-1.5 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    <span>{a}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+          
+          <section className="space-y-3">
+            <h2 className="text-gray-900 text-base font-medium">Try it Yourself</h2>
+            <div className="space-y-3">
+              <textarea
+                rows={3}
+                value={prompt}
+                onChange={e => setPrompt(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 resize-vertical min-h-[80px]"
+                placeholder="Edit the prompt and try it..."
+              />
+              <button
+                onClick={handleRunPrompt}
+                disabled={loading || !prompt.trim()}
+                className="w-full bg-gray-900 text-white rounded-md px-4 py-2 font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Running...' : 'Run Prompt'}
+              </button>
+              {error && (
+                <div className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-md p-3">
+                  {error}
+                </div>
+              )}
+              {response && (
+                <div className="space-y-2">
+                  <div className="text-gray-900 text-sm font-medium">Response:</div>
+                  <div className="bg-gray-50 border border-gray-200 rounded-md p-3 text-sm font-mono whitespace-pre-wrap">
+                    {response}
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+          
+          <section className="space-y-3">
+            <h2 className="text-gray-900 text-base font-medium">Additional Resources</h2>
+            <div className="space-y-2">
+              {promptType.resources.map((r, i) => (
+                <a
+                  key={i}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-sm text-gray-900 hover:text-gray-600 underline"
+                >
+                  {r.label}
+                </a>
+              ))}
+            </div>
+          </section>
+          
+          <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+            {prev ? (
+              <Link 
+                href={`/prompt/${prev.key}`} 
+                className="bg-white border border-gray-300 text-gray-900 rounded-md px-4 py-2 font-medium text-sm hover:bg-gray-50 transition-colors"
+              >
+                ← Previous
+              </Link>
+            ) : (
+              <Link 
+                href="/start" 
+                className="bg-white border border-gray-300 text-gray-900 rounded-md px-4 py-2 font-medium text-sm hover:bg-gray-50 transition-colors"
+              >
+                ← Back to Home
+              </Link>
+            )}
+            
+            {next ? (
+              <Link 
+                href={`/prompt/${next.key}`} 
+                className="bg-gray-900 text-white rounded-md px-4 py-2 font-medium text-sm hover:bg-gray-800 transition-colors"
+              >
+                Next →
+              </Link>
+            ) : (
+              <Link 
+                href="/summary" 
+                className="bg-gray-900 text-white rounded-md px-4 py-2 font-medium text-sm hover:bg-gray-800 transition-colors"
+              >
+                Finish
+              </Link>
+            )}
+          </div>
         </div>
-      )}
+      </div>
     </main>
   );
-} 
+}

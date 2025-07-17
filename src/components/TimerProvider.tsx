@@ -6,35 +6,40 @@ const TimerContext = createContext<{
   showTimer: boolean;
   setShowTimer: (show: boolean) => void;
   stopTimer: () => void;
-}>({ seconds: 0, showTimer: true, setShowTimer: () => {}, stopTimer: () => {} });
+  startTimer: () => void;
+}>({ seconds: 0, showTimer: true, setShowTimer: () => {}, stopTimer: () => {}, startTimer: () => {} });
 
 export function TimerProvider({ children }: { children: ReactNode }) {
   const [seconds, setSeconds] = useState(0);
   const [showTimer, setShowTimer] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const startedRef = useRef(false);
+  const [isRunning, setIsRunning] = useState(false);
+
+  const startTimer = () => {
+    if (!isRunning && !intervalRef.current) {
+      setIsRunning(true);
+      intervalRef.current = setInterval(() => {
+        setSeconds((s) => s + 1);
+      }, 1000);
+    }
+  };
 
   const stopTimer = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
+      setIsRunning(false);
     }
   };
 
   useEffect(() => {
-    if (!startedRef.current) {
-      startedRef.current = true;
-      intervalRef.current = setInterval(() => {
-        setSeconds((s) => s + 1);
-      }, 1000);
-    }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
 
   return (
-    <TimerContext.Provider value={{ seconds, showTimer, setShowTimer, stopTimer }}>
+    <TimerContext.Provider value={{ seconds, showTimer, setShowTimer, stopTimer, startTimer }}>
       {children}
     </TimerContext.Provider>
   );

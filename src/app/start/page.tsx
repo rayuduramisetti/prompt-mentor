@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
+import { useTimer } from '@/components/TimerProvider';
 
 const facts = [
   'Prompting is the new literacy for working with AI.',
@@ -15,6 +16,11 @@ export default function StartPage() {
   const [typing, setTyping] = useState(true);
   const typingRef = useRef<NodeJS.Timeout | null>(null);
   const autoAdvanceRef = useRef<NodeJS.Timeout | null>(null);
+  const { startTimer } = useTimer();
+
+  const handleStartLearning = () => {
+    startTimer();
+  };
 
   useEffect(() => {
     setDisplayed('');
@@ -40,30 +46,46 @@ export default function StartPage() {
   }, [factIdx]);
 
   return (
-    <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', textAlign: 'center', maxWidth: 600, margin: '0 auto', padding: 0 }}>
-      <h1 style={{ fontSize: '2.1rem', fontWeight: 700, marginBottom: '1rem', color: '#a05a2c', fontFamily: 'Merriweather, Georgia, serif' }}>
-        Unlock the Power of Prompting
-      </h1>
-      <p style={{ fontSize: '1.05rem', color: '#444', maxWidth: 480, marginBottom: '1.2rem', marginTop: 0 }}>
-        In this new era of AI, <b>prompt engineering</b> is the skill that lets you communicate, create, and innovate with language models. Whether you’re a developer, writer, or curious learner, mastering prompts will help you get the most out of AI tools like ChatGPT, Copilot, and more.
-      </p>
-      <div style={{ color: '#a05a2c', fontWeight: 700, fontSize: '1.1rem', marginBottom: '0.2em', display: 'block' }}>
-        Did you know?
-      </div>
-      <div style={{ color: '#000', fontSize: '1.45rem', fontWeight: 400, marginBottom: '1.1rem', width: 540, textAlign: 'center', minHeight: '3.2em', maxHeight: '3.2em', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', transition: 'all 0.3s' }}>
-        {displayed}
-        {typing && <span style={{ display: 'inline-block', width: 10, marginLeft: 2, background: '#a05a2c', height: 26, verticalAlign: 'middle', animation: 'blink 1s steps(1) infinite' }} />}
-      </div>
-      <style>{`@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }`}</style>
-      <div style={{ marginTop: '0.3rem', marginBottom: '0.7rem', maxWidth: 420 }}>
-        <div style={{ fontWeight: 700, fontSize: '1.08rem', color: '#a05a2c', marginBottom: '0.4rem' }}>Have 5 minutes?</div>
-        <div style={{ fontSize: '0.98rem', color: '#444', marginBottom: '1.1rem' }}>
-          Let me give you a quick, interactive overview of what prompt engineering is and why it matters. You’ll see real examples, try prompts yourself, and learn the essentials—fast.
+    <main className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="w-full max-w-md mx-auto space-y-6">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 space-y-6">
+          <div className="text-center space-y-4">
+            <h1 className="text-3xl font-semibold text-gray-900 leading-tight">
+              Unlock the Power of Prompting
+            </h1>
+            <p className="text-gray-600 text-base">
+              In this new era of AI, <strong className="text-gray-900">prompt engineering</strong> is the skill that lets you communicate, create, and innovate with language models. Whether you&apos;re a developer, writer, or curious learner, mastering prompts will help you get the most out of AI tools like ChatGPT, Copilot, and more.
+            </p>
+          </div>
+          
+          <div className="text-center space-y-3">
+            <div className="text-gray-900 text-sm font-medium">Did you know?</div>
+            <div className="bg-gray-50 rounded-md p-4">
+              <div className="text-gray-900 text-sm min-h-[2.5rem] flex items-center justify-center text-center">
+                {displayed}
+                {typing && <span className="inline-block w-0.5 ml-1 bg-gray-900 h-4 animate-blink"></span>}
+              </div>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="text-center space-y-2">
+              <div className="text-gray-900 text-base font-medium">Have 5 minutes?</div>
+              <p className="text-gray-600 text-sm">
+                Let me give you a quick, interactive overview of what prompt engineering is and why it matters. You&apos;ll see real examples, try prompts yourself, and learn the essentials—fast.
+              </p>
+            </div>
+            
+            <Link 
+              href="/prompt/zero-shot" 
+              onClick={handleStartLearning}
+              className="block w-full bg-gray-900 text-white rounded-md px-4 py-3 font-medium text-center hover:bg-gray-800 transition-colors"
+            >
+              Start Learning
+            </Link>
+          </div>
         </div>
-        <Link href="/prompt/zero-shot" style={{ background: '#a05a2c', color: '#fff', borderRadius: 6, padding: '0.7rem 1.7rem', fontWeight: 700, fontSize: '1.08rem', textDecoration: 'none', boxShadow: '0 2px 8px #0001', display: 'inline-block' }}>
-          Start
-        </Link>
       </div>
     </main>
   );
-} 
+}
