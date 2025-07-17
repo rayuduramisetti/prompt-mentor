@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 1200px;
+      height: 630px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      width: 1080px;
+      height: 510px;
+      background: #fafaf9;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 40px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .title {
+      font-size: 56px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0 0 20px 0;
+    }
+    .subtitle {
+      font-size: 32px;
+      font-weight: 400;
+      color: #6b7280;
+      margin: 0 0 40px 0;
+    }
+    .features {
+      font-size: 24px;
+      color: #1a1a1a;
+      margin: 0 0 60px 0;
+    }
+    .techniques {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      font-size: 18px;
+      color: #6b7280;
+      margin-bottom: 40px;
+    }
+    .technique-list {
+      text-align: left;
+    }
+    .technique-item {
+      margin: 10px 0;
+    }
+    .cta {
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 15px 40px;
+      border-radius: 8px;
+      font-size: 20px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Prompt Mentor</h1>
+    <p class="subtitle">Master AI Prompt Engineering</p>
+    <p class="features">20 Interactive Techniques • Hands-on Practice • Mobile-First</p>
+    
+    <div class="techniques">
+      <div class="technique-list">
+        <div class="technique-item">✓ Zero-shot Prompting</div>
+        <div class="technique-item">✓ Chain-of-Thought</div>
+        <div class="technique-item">✓ Few-shot Learning</div>
+        <div class="technique-item">✓ Role Prompting</div>
+      </div>
+      <div class="technique-list">
+        <div class="technique-item">✓ System Prompting</div>
+        <div class="technique-item">✓ Tree of Thoughts</div>
+        <div class="technique-item">✓ ReAct (Reasoning + Acting)</div>
+        <div class="technique-item">✓ Meta-Prompting</div>
+      </div>
+      <div class="technique-list">
+        <div class="technique-item">✓ Constitutional AI</div>
+        <div class="technique-item">✓ Plan and Execute</div>
+        <div class="technique-item">✓ Prompt Chaining</div>
+        <div class="technique-item">✓ And 9 more techniques...</div>
+      </div>
+    </div>
+    
+    <button class="cta">Start Learning Now</button>
+  </div>
+</body>
+</html>

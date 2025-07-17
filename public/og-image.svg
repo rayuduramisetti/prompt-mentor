@@ -1,0 +1,54 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#ffffff"/>
+  
+  <!-- Main Content Area -->
+  <rect x="60" y="60" width="1080" height="510" fill="#fafaf9" stroke="#e5e7eb" stroke-width="2" rx="12"/>
+  
+  <!-- Title -->
+  <text x="600" y="160" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="600" fill="#1a1a1a">
+    Prompt Mentor
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="220" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="400" fill="#6b7280">
+    Master AI Prompt Engineering
+  </text>
+  
+  <!-- Feature List -->
+  <text x="600" y="300" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="400" fill="#1a1a1a">
+    20 Interactive Techniques • Hands-on Practice • Mobile-First
+  </text>
+  
+  <!-- Technique Examples -->
+  <g font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#6b7280">
+    <text x="200" y="380">✓ Zero-shot Prompting</text>
+    <text x="200" y="410">✓ Chain-of-Thought</text>
+    <text x="200" y="440">✓ Few-shot Learning</text>
+    <text x="200" y="470">✓ Role Prompting</text>
+    
+    <text x="500" y="380">✓ System Prompting</text>
+    <text x="500" y="410">✓ Tree of Thoughts</text>
+    <text x="500" y="440">✓ ReAct (Reasoning + Acting)</text>
+    <text x="500" y="470">✓ Meta-Prompting</text>
+    
+    <text x="800" y="380">✓ Constitutional AI</text>
+    <text x="800" y="410">✓ Plan and Execute</text>
+    <text x="800" y="440">✓ Prompt Chaining</text>
+    <text x="800" y="470">✓ And 9 more techniques...</text>
+  </g>
+  
+  <!-- Call to Action -->
+  <rect x="450" y="510" width="300" height="50" fill="#1a1a1a" rx="8"/>
+  <text x="600" y="540" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="#ffffff">
+    Start Learning Now
+  </text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="120" cy="120" r="8" fill="#1a1a1a"/>
+  <circle cx="140" cy="120" r="8" fill="#6b7280"/>
+  <circle cx="160" cy="120" r="8" fill="#9ca3af"/>
+  
+  <!-- Bottom Border -->
+  <rect x="60" y="565" width="1080" height="4" fill="#1a1a1a"/>
+</svg>

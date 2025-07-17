@@ -163,6 +163,20 @@ export const promptTypes: PromptType[] = [
     ],
   },
   {
+    key: 'plan-and-execute',
+    name: 'Plan and Execute',
+    description: 'First create a detailed plan, then execute each step systematically with the ability to revise the plan.',
+    example: 'Task: Organize a team-building event for 20 people with a $500 budget.\n\nStep 1: Create a detailed plan\nStep 2: Execute each part of the plan\nStep 3: Adjust the plan if needed during execution\n\nPlease start by creating a comprehensive plan, then execute it step by step.',
+    analogies: [
+      'Like creating a project timeline before starting work.',
+      'Writing a recipe before cooking a complex meal.',
+    ],
+    resources: [
+      { label: 'Plan and Execute Paper', url: 'https://arxiv.org/abs/2305.04091' },
+      { label: 'Planning in AI Systems', url: 'https://www.promptingguide.ai/techniques/planning' },
+    ],
+  },
+  {
     key: 'structured-data',
     name: 'Structured Data Prompting',
     description: 'Organize information in tables, lists, or structured formats for clearer analysis.',
